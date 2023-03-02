@@ -13,60 +13,62 @@ class PieChart {
     */
     drawPie() {
 
-        let increases = this.data.map((i,v) => {
+        //Gets percentage change of values between years and converts data array
+        let changePer = this.data.map((i,v) => {
             if (v == 0) {
                 return;
             }
             let previousVal = this.data[v-1];
             return((i - previousVal)  / previousVal) *100
         }).filter(Boolean)
-        this.data = increases;
+        this.data = changePer;
 
-        
-        console.log(this.data)
-        
-   
-        //gets total number of segments to be created
-        let total = 0;
-        this.data.forEach(i => total += i);
-        
-
-        angleMode(RADIANS)
-        let angle = 0;
        
+        let total = 0; //gets total number of segments to be created
+        this.data.forEach(i => total += i);
+
+        let angle = 0; // for piechart 
+        let prevDeg = 0 // for text placement
+
         //iterates for the length of the data array
-        for (let i = 0; i < this.data.length; i++) {
+        for (let i = 0; i <this.data.length; i++) {
+            //gets degrees of circle from array, converts to whole, non negative float
+            let degrees = ((this.data[i]) / total) * 360;
+            prevDeg += degrees 
 
-            //gets degrees of circle from array
-            let degrees = (Math.abs(this.data[i]) / total) * 360;
-            console.log(degrees)
-            push()
-            fill(200)
-            
-            textSize(15);
-            textAlign(CENTER, CENTER);
-                
-            translate(this.posX,this.posY)
-            rotate(degrees);
-
-            // rounds to 1/4 of a percent
-            text(Math.round(this.data[i]*4)/4 + '%', 0,(this.diameter / 2 )+ 10)
-            
-            pop()
+            //colours the arcs
             fill(20 + (20*i),71 ,111);
-
+            
             //arc() generates a sector of a circle
             arc(
-                this.posX,
-                this.posY,
-                this.diameter,
-                this.diameter,
-                angle,
-                angle + radians(degrees) ,
-                PIE);
+            this.posX,
+            this.posY,
+            this.diameter,
+            this.diameter,
+            angle,
+            angle+radians(degrees) ,
+            PIE
+            );
 
             // Add last angle to angle variable, sets starting position of next arc
             angle += radians(degrees);
+
+            // text labels
+            push()
+            fill(200)
+            textSize(15);
+            textAlign(CENTER, CENTER);
+            
+            translate(this.posX,this.posY)
+            angleMode(DEGREES)
+            rotate((prevDeg-90)- degrees/2);
+            angleMode(RADIANS)
+            // rounds to 1/4 of a percent
+            
+            text(Math.round(this.data[i]*4)/4 + '%', 0,(this.diameter / 2 )+(this.diameter / 20))
+            text(table.rows[i].arr[0], 0,(this.diameter / 2 )+(this.diameter / 20+20))
+            
+            pop()
             // console.log(data[i]/total*360)
         }
     }

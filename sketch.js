@@ -19,8 +19,6 @@ function tidyData(_data,arr){
     // return _num * scaleValue
 }
 
-
-
 function setup() {
     let w = windowWidth / 8 + 50;
     let h = windowHeight / 8 + 50;
