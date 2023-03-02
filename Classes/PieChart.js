@@ -12,30 +12,49 @@ class PieChart {
     * Draws a pie chart with given data array
     */
     drawPie() {
+
+        let increases = this.data.map((i,v) => {
+            if (v == 0) {
+                return;
+            }
+            let previousVal = this.data[v-1];
+            return((i - previousVal)  / previousVal) *100
+        }).filter(Boolean)
+        this.data = increases;
+
+        
         console.log(this.data)
         
-        let colourArray = ['#1D2F6F','#8390FA','#9297E4', '#A19ECE', '#BFACA1', '#FAC748', '#F9E9EC', '#F9BBCD','#F9A4BD','#F88DAD']
+   
+        //gets total number of segments to be created
         let total = 0;
-        
         this.data.forEach(i => total += i);
-
-        //This should be impossible.
-        if (total / total * 360 != 360) {
-            return console.log('Data cannot equal 360 degrees!')
-        }
-        else {
-            console.log(`Degrees add to: ${total / total * 360}!`)
-        }
+        
 
         angleMode(RADIANS)
         let angle = 0;
        
+        //iterates for the length of the data array
         for (let i = 0; i < this.data.length; i++) {
+
             //gets degrees of circle from array
-            let degrees = (this.data[i] / total) * 360;
-            let colour = color(colourArray[Math.floor(Math.random()* colourArray.length)])
-            fill(colour);
-            // console.log(Math.floor(Math.random() * colourArray.length+ 1))
+            let degrees = (Math.abs(this.data[i]) / total) * 360;
+            console.log(degrees)
+            push()
+            fill(200)
+            
+            textSize(15);
+            textAlign(CENTER, CENTER);
+                
+            translate(this.posX,this.posY)
+            rotate(degrees);
+
+            // rounds to 1/4 of a percent
+            text(Math.round(this.data[i]*4)/4 + '%', 0,(this.diameter / 2 )+ 10)
+            
+            pop()
+            fill(20 + (20*i),71 ,111);
+
             //arc() generates a sector of a circle
             arc(
                 this.posX,
@@ -43,7 +62,7 @@ class PieChart {
                 this.diameter,
                 this.diameter,
                 angle,
-                angle + radians(degrees),
+                angle + radians(degrees) ,
                 PIE);
 
             // Add last angle to angle variable, sets starting position of next arc

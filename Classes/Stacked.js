@@ -51,14 +51,14 @@ class Stacked {
             push();
             translate(this.marginLeft + (x * this.masterGap), 0)
             noStroke()
-            fill(this.data1[x]+50, 100 ,100) 
+            // fill(this.data1[x]+50, 100 ,100) 
+            fill(239,71,111)
             rect(this.posX, this.posY, this.blockWidth, this.scale(-this.data1[x]));
 
             
             for(let i = 0; i < this.data2.length; i++){
-                fill(100, 100 ,this.data1[x]+75) 
-                // console.log(this.data1[x])
-                console.log(this.scale(this.data1[x]))
+                
+                fill(41,131,163)
                 rect(this.posX, this.posY-this.scale(this.data1[x]),this.blockWidth,this.scale(-this.data2[i]))
             }
             pop();
@@ -77,7 +77,7 @@ class Stacked {
         
         let tickgap = this.height / (_numTicks);
         let numGap = this.maxValue / (_numTicks);
-        console.log(this.maxValue)
+        // console.log(this.maxValue)
         push();
         translate(this.posX, this.posY);
         angleMode(DEGREES);
@@ -94,7 +94,6 @@ class Stacked {
             stroke(200  );
             line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
             noStroke();
-            console.log(numGap)
 
             if (_labels) {
                 textSize(15);
