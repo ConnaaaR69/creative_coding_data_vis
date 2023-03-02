@@ -34,7 +34,7 @@ class PieChart {
         for (let i = 0; i <this.data.length; i++) {
             //gets degrees of circle from array, converts to whole, non negative float
             let degrees = ((this.data[i]) / total) * 360;
-            prevDeg += degrees 
+            prevDeg += degrees;
 
             //colours the arcs
             fill(20 + (20*i),71 ,111);
@@ -54,8 +54,8 @@ class PieChart {
             angle += radians(degrees);
 
             // text labels
-            push()
-            fill(200)
+            push();
+            fill(200);
             textSize(15);
             textAlign(CENTER, CENTER);
             
