@@ -42,9 +42,9 @@ function setup() {
     
     s = new Stacked(250,250,450,h*4+50,data1,data2,10,10,5);
 
-    p = new PieChart(data2,450,h*2,s.width);
+    p = new PieChart(data2,800,h*3.5,s.width * 1.4);
    
-    l = new Linechart(250,250,850,h*3,data2,10,10,5)
+    l = new Linechart(250,250,450,h*2,data2,10,10,5)
    
 } 
 
@@ -52,21 +52,17 @@ function draw(){
     background(40);
 
     //rotated bar chart
-    b.drawLegend('€ / Week Earnings '+table.columns[1]);
-    b.drawXAxis(0);
-    b.drawYAxis(90);
-    b.drawData(90);
-   
+    b.render('Average Weekly Earnings \n for Education Sector(G)')
     /////
 
     //Standard barchart
     bar.render()
-    bar.drawLegend(table.columns[2])
+    // bar.drawLegend(table.columns[2])
     /////
 
     // stacked barchart
     s.drawAxis();
-    s.drawAxis(90,false,0);
+    s.drawAxis(false,0);
     s.drawData();
     /////
 
@@ -75,9 +71,8 @@ function draw(){
     /////
    
     // Linechart
-    l.drawXAxis(90);
-    l.drawYAxis(0);
-    l.drawData();
+    l.render()
+   
     /////
     
 }

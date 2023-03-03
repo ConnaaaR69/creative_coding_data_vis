@@ -28,7 +28,7 @@ class PieChart {
 
         let angle = 0; // for piechart 
         let prevDeg = 0 // for text placement
-        var ptot = 0
+        
         //iterates for the length of the data array
         for (let i = 0; i < 13; i++) {
             //gets degrees of circle from array, converts to whole, non negative float
@@ -49,7 +49,8 @@ class PieChart {
             angle+radians(degrees) ,
             PIE
             );
-
+            fill(40)
+            ellipse(this.posX,this.posY, this.diameter- 100)
             // Add previous angle to angle variable, sets starting position of next arc
             angle += radians(degrees);
 
@@ -64,6 +65,7 @@ class PieChart {
             rotate((prevDeg-90)- degrees/2);
             degrees = ((this.data[i]) / total) * 360;
             // rounds to 1/4 of a percent
+            
             text(Math.round(this.data[i]*4)/4 + '%', 0,(this.diameter / 2 )+(this.diameter / 20))
             text(table.rows[i].arr[0], 0,(this.diameter / 2 )+(this.diameter / 20+20))
             

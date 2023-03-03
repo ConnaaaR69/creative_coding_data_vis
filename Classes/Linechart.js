@@ -19,9 +19,10 @@ class Linechart {
      * This renders the barchart in its entireity if no optional values for drawData and drawAxis methods need passing
      */
     render() {
-        // this.drawData()
-        // this.drawAxis()
-        // this.drawAxis(0)
+       
+        this.drawYAxis()
+        this.drawXAxis()
+        this.drawData()
     }
 
 
@@ -53,90 +54,184 @@ class Linechart {
             
             //draw mean line
             if (x >= 1) {
-                stroke(239,71,111)
+                stroke(138, 48, 162)
                 strokeWeight(3);
                 
                 translate(this.posX, this.posY)
                 line(this.blockWidth / 2 - this.masterGap, this.scale(-this.data[x-1]/2), this.blockWidth / 2, this.scale(-this.data[x]/2))
             }
             //draw mean line dots
-            fill(64,86,244);
+            fill(138, 48, 162);
             ellipse(this.blockWidth / 2, this.scale(-this.data[x])/2, 5, 5)
            
             pop();
         }
     }
    
-   /**
+//    /**
+//      * Draws the axis lines of a bar chart
+//      * @param {number} _rotation - enter a number between 0 - 359 for rotation
+//      * @param {boolean} _labels - enable Y Axis data labels
+//      * @param {number} _lengthTicks - length of Y axis marker ticks
+//      * @param {boolean} _grid - enable or disable gridlines
+//      */
+//    drawYAxis(_labels = true, _lengthTicks = 10) {
+//     let _numTicks = this.data.length
+//     let tickgap = this.height / (_numTicks);
+//     let numGap = this.maxValue / (_numTicks);
+//     push();
+
+//     translate(this.posX, this.posY);
+//     stroke(100);
+//     strokeWeight(1);
+//     line(0, 0, 0, -this.height);
+
+//     //draws ticks
+//     for (let x = 0; x < _numTicks + 1; x++) {
+//         fill(200);
+//         stroke(200);
+//         line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
+//         stroke(50);
+//         line(0, x * -tickgap, this.height, x * -tickgap);
+//         noStroke();
+
+//         //draws axis labels
+//         if (_labels) {
+//             textSize(15);
+//             textAlign(LEFT, CENTER);
+//             text(Math.round(((x * numGap) / 5) * 5), _lengthTicks + 10, x * -tickgap);
+//         };
+//     }
+//     pop();
+// }
+
+//    /**
+//      * Draws the axis lines of a bar chart
+//      * @param {number} _rotation - enter a number between 0 - 359 for rotation
+//      * @param {boolean} _labels - enable Y Axis data labels
+//      * @param {number} _lengthTicks - length of Y axis marker ticks
+//      * @param {boolean} _grid - enable or disable gridlines
+//      */
+//     drawXAxis(_labels = true, _lengthTicks = 10) {
+//         let _numTicks = this.data.length
+//         let tickgap = this.height / (_numTicks);
+//         push();
+//         // draw axis
+
+//         translate(this.posX, this.posY);
+//         stroke(100);
+//         strokeWeight(1);
+//         line(0, 0, 0, -this.height);
+
+//         //draws ticks
+//         for (let x = 0; x < this.data.length; x++) {
+//             fill(200);
+//             stroke(200);
+//             line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
+//             stroke(50)
+//             line(0, (x+1) * -tickgap, this.height, (x+1) * -tickgap)
+//             noStroke();
+
+
+//             if (_labels) {
+//                 textSize(15);
+//                 textAlign(RIGHT, CENTER);
+                
+//                 text(table.getRows()[x].arr[1], -_lengthTicks, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
+//             }
+//         }
+//         pop();
+//     }
+
+    /**
      * Draws the axis lines of a bar chart
      * @param {number} _rotation - enter a number between 0 - 359 for rotation
      * @param {boolean} _labels - enable Y Axis data labels
      * @param {number} _lengthTicks - length of Y axis marker ticks
      * @param {boolean} _grid - enable or disable gridlines
      */
-   drawYAxis(_labels = true, _lengthTicks = 10) {
-    let _numTicks = this.data.length
-    let tickgap = this.height / (_numTicks);
-    let numGap = this.maxValue / (_numTicks);
-    push();
-
-    translate(this.posX, this.posY);
-    stroke(100);
-    strokeWeight(1);
-    line(0, 0, 0, -this.height);
-
-    //draws ticks
-    for (let x = 0; x < _numTicks + 1; x++) {
-        fill(200);
-        stroke(200);
-        line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
-        stroke(50);
-        line(0, x * -tickgap, this.height, x * -tickgap);
-        noStroke();
-
-        //draws axis labels
-        if (_labels) {
-            textSize(15);
-            textAlign(LEFT, CENTER);
-            text(Math.round(((x * numGap) / 5) * 5), _lengthTicks + 10, x * -tickgap);
-        };
-    }
-    pop();
-}
-
-   /**
-     * Draws the axis lines of a bar chart
-     * @param {number} _rotation - enter a number between 0 - 359 for rotation
-     * @param {boolean} _labels - enable Y Axis data labels
-     * @param {number} _lengthTicks - length of Y axis marker ticks
-     * @param {boolean} _grid - enable or disable gridlines
-     */
-    drawXAxis(_labels = true, _lengthTicks = 10) {
+    drawYAxis(_rotation = 0, _labels = true, _lengthTicks = 10) {
         let _numTicks = this.data.length
         let tickgap = this.height / (_numTicks);
+        let numGap = this.maxValue / (_numTicks);
         push();
-        // draw axis
+
         translate(this.posX, this.posY);
+        angleMode(DEGREES);
+        rotate(_rotation);
         stroke(100);
         strokeWeight(1);
         line(0, 0, 0, -this.height);
+        // line(0, 0, this.width, 0);
+
+        //draws ticks
+ 
+        for (let x = 0; x < _numTicks + 1; x++) {
+            fill(200);
+           
+            stroke(200);
+            if (_rotation < 45) {
+                line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
+                
+                    stroke(50)
+                    line(0, x * -tickgap, this.height, x * -tickgap)
+                
+            } else {
+                line(0, x * -tickgap, _lengthTicks, x * -tickgap);
+                    stroke(50)
+                    line(0, x * -tickgap, -this.height, x * -tickgap)
+                
+            }
+            noStroke();
+            if (_labels) {
+                textSize(15);
+                // series label
+                
+                if (_rotation > 45) {
+                    textAlign(LEFT, CENTER);
+                    text(Math.round((x * numGap) / 5) * 5, 10, x * -tickgap);
+                }
+                else{
+                    textAlign(RIGHT, CENTER);
+                    text(Math.round((x * numGap) / 5) * 5, -10, x * -tickgap);
+
+                }
+                // text((x * numGap), -10, x * -tickgap);
+            };
+        }
+        pop();
+
+    }
+    drawXAxis(_rotation = 90, _labels = true, _lengthTicks = 10) {
+        let _numTicks = this.data.length
+        let tickgap = this.height / (_numTicks);
+        push();
+
+        translate(this.posX, this.posY);
+        angleMode(DEGREES);
+        rotate(_rotation);
+       
+        
+        stroke(100);
+        strokeWeight(1);
+        line(0, 0, 0, -this.height);
+        // line(0, 0, this.width, 0);
 
         //draws ticks
         for (let x = 0; x < this.data.length; x++) {
             fill(200);
             stroke(200);
-            line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
+            line(10, x * -tickgap, _lengthTicks, x * -tickgap);
             stroke(50)
-            line(0, (x+1) * -tickgap, this.height, (x+1) * -tickgap)
+            line(0, (x+1) * -tickgap, -this.height, (x+1) * -tickgap)
             noStroke();
 
 
             if (_labels) {
                 textSize(15);
                 textAlign(RIGHT, CENTER);
-                
-                text(table.getRows()[x].arr[0], -_lengthTicks, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
-            }
+                text(table.getRows()[x].arr[0], 40, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
+            };
         }
         pop();
     }

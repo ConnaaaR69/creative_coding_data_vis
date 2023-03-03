@@ -18,9 +18,10 @@ class HBarChart {
     /**
      * This renders the barchart in its entireity if no optional values for drawData and drawAxis methods need passing
      */
-    render() {
+    render(_title) {
         this.drawYAxis();
-        this.drawXAxis(90, true, 0);
+        this.drawXAxis();
+        this.drawLegend(_title);
         this.drawData(); 
     }
 
@@ -42,36 +43,34 @@ class HBarChart {
      * Draws the bars for the bar chart with the data defined in the data attribute
      * @param {number} _rotation - rotates the graph, currently only 0 and 90 supported
      */
-    drawData(_rotation = 0) {
+    drawData() {
         // console.log('Drawing!')
         for (let x = 0; x < this.data.length; x++) {
             push();
             translate(this.posX, this.posY)
-            rotate(_rotation)
-             if(_rotation > 45){
-                
-                translate(-this.width,0)
-             }
-            translate(this.marginLeft + (x * this.masterGap), 0)
+            rotate(90)
+            translate(-this.width+(this.marginLeft + (x * this.masterGap)), 0)
             noStroke()
             fill(78, 168, 222)
             rect(0, 0, this.blockWidth, this.scale(-this.data[x]));
-
             pop();
         }
-
     }
 
-    drawLegend(_column){
-      
+    drawLegend(_title){
         fill(200)
-        // rotate(-90)
-        // translate(100,70)
-        text(`${_column}`,this.posX, this.posY + 50)
+        textSize(18);
+        textStyle(BOLD);
+        textAlign(CENTER,CENTER)
+        console.log(this.height)
+        text(`${_title}`, this.posX + this.width/2, this.posY - this.height - 40 )
+        textSize(12);
+        textStyle(NORMAL);
+        text(`${table.columns[1]}`,this.posX + this.width/6, this.posY + 50)
         push()
-        translate(410,0)
+        translate(this.posY + 40,this.posX)
         rotate(90)
-        text('Year, Quarter 1 ' +'('+ _column+')' ,this.posX, this.posY + 50)
+        text(table.columns[0] ,this.posX, this.posY)
         pop()
     }
 
@@ -87,7 +86,6 @@ class HBarChart {
     drawYAxis(_rotation = 0, _labels = true, _lengthTicks = 10) {
         let _numTicks = this.data.length
         let tickgap = this.height / (_numTicks);
-        let numGap = this.maxValue / (_numTicks);
         push();
 
         translate(this.posX, this.posY);
@@ -100,62 +98,59 @@ class HBarChart {
 
         //draws ticks
  
-        for (let x = 0; x < _numTicks + 1; x++) {
+        for (let x = 0; x < this.data.length; x++) {
+            
             fill(200);
             stroke(200);
             line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
-             
+            
             //gridline
             stroke(50)
-            line(0, x * -tickgap, -this.height, x * -tickgap)
-            
+            line(0, x * -tickgap, this.height, x * -tickgap)
             noStroke();
+            
             if (_labels) {
-                textSize(15);
                 // series label
-
-                textAlign(LEFT, CENTER);
-                text(Math.round((x * numGap) / 5) * 5, 10, x * -tickgap);
-                
-                
-                // text((x * numGap), -10, x * -tickgap);
-            };
+                textSize(15);
+                textAlign(RIGHT, CENTER);
+                console.log(table.getRows()[x])
+                text(table.getRows()[x].arr[0], -_lengthTicks, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
+            }
         }
         pop();
 
     }
     drawXAxis(_rotation = 90, _labels = true, _lengthTicks = 10) {
+        
         let _numTicks = this.data.length
         let tickgap = this.height / (_numTicks);
+        let numGap = this.maxValue / (_numTicks);
+        
         push();
-
         translate(this.posX, this.posY);
         angleMode(DEGREES);
         rotate(_rotation);
        
-        
         stroke(100);
         strokeWeight(1);
         line(0, 0, 0, -this.height);
         // line(0, 0, this.width, 0);
 
         //draws ticks
-        for (let x = 0; x < this.data.length; x++) {
+
+        for (let x = 0; x < _numTicks + 1; x++) {
             fill(200);
             stroke(200);
-            line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
+            line(0, x * -tickgap, _lengthTicks, x * -tickgap);
             stroke(50)
-            line(0, (x+1) * -tickgap, this.height, (x+1) * -tickgap)
-                
-           
+            line(0, x * -tickgap, -this.height, x * -tickgap)
             noStroke();
 
 
             if (_labels) {
                 textSize(15);
-                textAlign(RIGHT, CENTER);
-               
-                text(table.getRows()[x].arr[0], -_lengthTicks, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
+                textAlign(LEFT, CENTER);
+                text(Math.round((x * numGap) / 5) * 5, _lengthTicks, x * -tickgap);
             };
         }
         pop();

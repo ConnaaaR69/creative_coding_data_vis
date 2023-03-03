@@ -20,7 +20,8 @@ class BarChart {
      */
     render() {
         this.drawYAxis();
-        this.drawXAxis(90, true, 0);
+        this.drawXAxis();
+        this.drawLegend()
         this.drawData(); 
     }
 
@@ -42,16 +43,11 @@ class BarChart {
      * Draws the bars for the bar chart with the data defined in the data attribute
      * @param {number} _rotation - rotates the graph, currently only 0 and 90 supported
      */
-    drawData(_rotation = 0) {
+    drawData() {
         // console.log('Drawing!')
         for (let x = 0; x < this.data.length; x++) {
             push();
             translate(this.posX, this.posY)
-            rotate(_rotation)
-             if(_rotation > 45){
-                
-                translate(-this.width,0)
-             }
             translate(this.marginLeft + (x * this.masterGap), 0)
             noStroke()
             fill(78, 168, 222)
@@ -62,16 +58,13 @@ class BarChart {
 
     }
 
-    drawLegend(_column){
-      
+    drawLegend(){
         fill(200)
-        // rotate(-90)
-        // translate(100,70)
-        text(`${_column}`,this.posX, this.posY + 50)
+        text(`${table.columns[0]}`,this.posX + this.width/6, this.posY + 60)
         push()
         translate(410,0)
         rotate(90)
-        text('Year, Quarter 1 ' +'('+ _column+')' ,this.posX, this.posY + 50)
+        text(table.columns[1] ,this.posX + this.height/3, this.posY + 50)
         pop()
     }
 
@@ -96,91 +89,62 @@ class BarChart {
         stroke(100);
         strokeWeight(1);
         line(0, 0, 0, -this.height);
-        // line(0, 0, this.width, 0);
 
         //draws ticks
- 
         for (let x = 0; x < _numTicks + 1; x++) {
             fill(200);
-           
             stroke(200);
-            if (_rotation < 45) {
-                line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
-                
-                    stroke(50)
-                    line(0, x * -tickgap, this.height, x * -tickgap)
-                
-            } else {
-                line(0, x * -tickgap, _lengthTicks, x * -tickgap);
-                    stroke(50)
-                    line(0, x * -tickgap, -this.height, x * -tickgap)
-                
-            }
+            line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
+            stroke(50)
+            line(0, x * -tickgap, this.height, x * -tickgap)
             noStroke();
+
+
             if (_labels) {
                 textSize(15);
                 // series label
-                
-                if (_rotation > 45) {
-                    textAlign(LEFT, CENTER);
-                    text(Math.round((x * numGap) / 5) * 5, 10, x * -tickgap);
-                }
-                else{
-                    textAlign(RIGHT, CENTER);
-                    text(Math.round((x * numGap) / 5) * 5, -10, x * -tickgap);
-
-                }
-                // text((x * numGap), -10, x * -tickgap);
+                textAlign(RIGHT, CENTER);
+                text(Math.round((x * numGap) / 5) * 5, -10, x * -tickgap);
             };
         }
         pop();
 
     }
-    drawXAxis(_rotation = 90, _labels = true, _lengthTicks = 10) {
+    drawXAxis( _labels = true, _lengthTicks = 10) {
         let _numTicks = this.data.length
         let tickgap = this.height / (_numTicks);
-        push();
 
+        push();
         translate(this.posX, this.posY);
         angleMode(DEGREES);
-        rotate(_rotation);
-       
         
+
         stroke(100);
         strokeWeight(1);
-        line(0, 0, 0, -this.height);
-        // line(0, 0, this.width, 0);
+        //axis line
+        line(0, 0, this.width, 0);
 
         //draws ticks
         for (let x = 0; x < this.data.length; x++) {
             fill(200);
+            
+            //tick marks
             stroke(200);
-            if (_rotation < 45) {
-                line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
-                
-                    stroke(50)
-                    line(0, (x+1) * -tickgap, this.height, (x+1) * -tickgap)
-                
-            } else {
-                line(0, x * -tickgap, _lengthTicks, x * -tickgap);
-             
-                    stroke(50)
-                    line(0, (x+1) * -tickgap, -this.height, (x+1) * -tickgap)
-                
-            }
+            line(x * tickgap, 0, x * tickgap, _lengthTicks); 
+
+            //grid
+            stroke(50)
+            line((x+1) * tickgap,0,(x+1) * tickgap,  -this.height )
             noStroke();
 
 
             if (_labels) {
-                textSize(15);
-                textAlign(RIGHT, CENTER);
-                // text((x * numGap), -10, x * -tickgap);
-                if (_rotation < 45) {
-                    text(table.getRows()[x].arr[0], -_lengthTicks, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
-                    
-                } else {
-                    text(table.getRows()[x].arr[0], 40, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
-                }
+            textSize(15);
+            textAlign(RIGHT, CENTER);
+            push()
+            rotate(90)
+            text(table.getRows()[x].arr[0], 45,-(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
+            pop()
             };
         }
         pop();
