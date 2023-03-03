@@ -104,7 +104,8 @@ class HBarChart {
             fill(200);
             stroke(200);
             line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
-                
+             
+            //gridline
             stroke(50)
             line(0, x * -tickgap, -this.height, x * -tickgap)
             
@@ -112,16 +113,11 @@ class HBarChart {
             if (_labels) {
                 textSize(15);
                 // series label
-                
-                if (_rotation > 45) {
-                    textAlign(LEFT, CENTER);
-                    text(Math.round((x * numGap) / 5) * 5, 10, x * -tickgap);
-                }
-                else{
-                    textAlign(RIGHT, CENTER);
-                    text(Math.round((x * numGap) / 5) * 5, -10, x * -tickgap);
 
-                }
+                textAlign(LEFT, CENTER);
+                text(Math.round((x * numGap) / 5) * 5, 10, x * -tickgap);
+                
+                
                 // text((x * numGap), -10, x * -tickgap);
             };
         }
