@@ -2,79 +2,73 @@
 let table;
 let data1 = [];
 let data2 = [];
-let series = [];
+let series = []
 function preload() {
     table = loadTable(`data/rppi_test.csv`,'csv', 'header');
 
 }
 
 function tidyData(_data,arr){
-    // console.log(_data)
-    // let scaleValue = chartHeight / maxValue;
     _data.forEach(i => {
         arr.push(int(i))
     });
-        
-    // let scaleValue = chartHeight / maxValue;
-    // return _num * scaleValue
-}
+}     
+
 
 function setup() {
-    let w = windowWidth / 8 + 50;
+    let w = windowWidth;
     let h = windowHeight / 8 + 50;
+    
+    series = table.columns;
     createCanvas(windowWidth,windowHeight); 
     noLoop();
-    series = table.columns;
-    console.log(series)
     
-        tidyData(table.getColumn(series[1]),data1)
-        // console.log(int(table.rows[p].obj.Value1)) 
-        tidyData(table.getColumn(series[2]),data2)
+    tidyData(table.getColumn(series[1]),data1)
+    tidyData(table.getColumn(series[2]),data2)
         
-    
-
     angleMode(DEGREES)
-    push()
     
-    b = new HBarChart(250,250,100,h*2,data1,10,10,5);
-
-    bar= new BarChart(250,250,100,h*4+50,data2,10,10,5);
     
-    s = new Stacked(250,250,450,h*4+50,data1,data2,10,10,5);
+    horBar = new HBarChart(250,250,w/12,h*2+100,data1,10,10,5);
+    bar= new BarChart(250,250,w/12,h*4+200,data1,10,10,5); 
+    
+    stacked = new Stacked(250,250,(w/12)*5,h*4+200,data1,data2,10,10,5);
+    lineStacked = new Linechart(250,250,(w/12)*5,h*2+100,data1,data2,10,10,5)
 
-    p = new PieChart(data2,800,h*3.5,s.width * 1.4);
+    pie = new PieChart(data2,(w/12)*8,h*3.5+100,stacked.width * 1.4);
    
-    l = new Linechart(250,250,450,h*2,data2,10,10,5)
    
 } 
 
 function draw(){  
     background(40);
-
+    fill(200)
+    textSize(25)
+    textAlign(CENTER)
+    textStyle(BOLD)
+    text('Comparison of Change in Weekly Earnings \n in NACE Retail (G) & Education (P) from 2008 to 2022', windowWidth /2, 50)
+    textStyle(NORMAL)
+    textSize(15)
     //rotated bar chart
-    b.render('Average Weekly Earnings \n for Education Sector(G)')
+    horBar.render('Average Weekly Earnings \n for Education Sector (P)')
     /////
 
     //Standard barchart
-    bar.render()
+    bar.render('Average Weekly Earnings \n for Retail Sector (G)')
     // bar.drawLegend(table.columns[2])
     /////
 
     // stacked barchart
-    s.drawAxis();
-    s.drawAxis(false,0);
-    s.drawData();
+    stacked.render('Stacked Avg Weekly Earnings \n for Education (P) & Retail (G) Sectors')
     /////
 
     // piechart
-    p.drawPie()
+    pie.render()
     /////
    
-    // Linechart
-    l.render()
-   
-    /////
-    
+    // stacked Linechart
+    lineStacked.render('Stacked Average Weekly Earnings, \n  Retail (G) & Education (P) Sectors with Mean Line ')
+    ///// 
 }
 
 

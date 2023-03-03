@@ -18,10 +18,10 @@ class BarChart {
     /**
      * This renders the barchart in its entireity if no optional values for drawData and drawAxis methods need passing
      */
-    render() {
+    render(_title) {
         this.drawYAxis();
         this.drawXAxis();
-        this.drawLegend()
+        this.drawLegend(_title)
         this.drawData(); 
     }
 
@@ -58,13 +58,25 @@ class BarChart {
 
     }
 
-    drawLegend(){
+    drawLegend(_title){
         fill(200)
-        text(`${table.columns[0]}`,this.posX + this.width/6, this.posY + 60)
+        textSize(18);
+        textStyle(BOLD);
+        textAlign(CENTER,CENTER)
+
+        //Chart Heading
+        text(`${_title}`, this.posX + this.width/2, this.posY - this.height - 40 )
+
+        //text style resets
+        textSize(15);
+        textStyle(NORMAL);
+        text(`${table.columns[2]}`,this.posX + this.width/6, this.posY + 50)
         push()
-        translate(410,0)
+        
+        translate(this.posY + 40,this.posX)
         rotate(90)
-        text(table.columns[1] ,this.posX + this.height/3, this.posY + 50)
+        text(table.columns[0] ,this.posX , this.posY)
+        
         pop()
     }
 

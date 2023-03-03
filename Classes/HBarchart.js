@@ -62,15 +62,20 @@ class HBarChart {
         textSize(18);
         textStyle(BOLD);
         textAlign(CENTER,CENTER)
-        console.log(this.height)
+
+        //Chart Heading
         text(`${_title}`, this.posX + this.width/2, this.posY - this.height - 40 )
-        textSize(12);
+
+        //text style resets
+        textSize(15);
         textStyle(NORMAL);
         text(`${table.columns[1]}`,this.posX + this.width/6, this.posY + 50)
         push()
+        
         translate(this.posY + 40,this.posX)
         rotate(90)
-        text(table.columns[0] ,this.posX, this.posY)
+        // text(table.columns[0] ,this.posX , this.posY)
+        
         pop()
     }
 
@@ -111,9 +116,8 @@ class HBarChart {
             
             if (_labels) {
                 // series label
-                textSize(15);
+                
                 textAlign(RIGHT, CENTER);
-                console.log(table.getRows()[x])
                 text(table.getRows()[x].arr[0], -_lengthTicks, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
             }
         }

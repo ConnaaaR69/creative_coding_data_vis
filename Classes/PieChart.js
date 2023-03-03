@@ -11,7 +11,7 @@ class PieChart {
     /**
     * Draws a pie chart with given data array
     */
-    drawPie() {
+    render() {
         //Gets percentage change of values between years and converts data array
         let changePer = this.data.map((i,v) => {
             if (v == 0) {
