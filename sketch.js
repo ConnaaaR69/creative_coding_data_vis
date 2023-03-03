@@ -36,7 +36,7 @@ function setup() {
     angleMode(DEGREES)
     push()
     
-    b = new BarChart(250,250,100,h*2,data1,10,10,5);
+    b = new HBarChart(250,250,100,h*2,data1,10,10,5);
 
     bar= new BarChart(250,250,100,h*4+50,data2,10,10,5);
     

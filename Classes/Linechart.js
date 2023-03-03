@@ -50,13 +50,14 @@ class Linechart {
             translate(this.marginLeft + (x * this.masterGap), 0)
             noStroke()
             
-            fill(239,71,111)
+           
+            fill(78, 168, 222)
             rect(this.posX, this.posY, this.blockWidth, this.scale(-this.data[x]));
             
             push()
             
             if (x >= 1) {
-                stroke(41,131,163)
+                stroke(239,71,111)
                 // fill(20,70,160) 
                 // fill()
                 strokeWeight(3);

@@ -1,4 +1,4 @@
-class BarChart {
+class HBarChart {
     constructor(_height, _width, _posX, _posY, _data, _marginL, _marginR, _blockGap, _rotation = 0) {
 
         this.height = _height;
@@ -102,20 +102,12 @@ class BarChart {
  
         for (let x = 0; x < _numTicks + 1; x++) {
             fill(200);
-           
             stroke(200);
-            if (_rotation < 45) {
-                line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
+            line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
                 
-                    stroke(50)
-                    line(0, x * -tickgap, this.height, x * -tickgap)
-                
-            } else {
-                line(0, x * -tickgap, _lengthTicks, x * -tickgap);
-                    stroke(50)
-                    line(0, x * -tickgap, -this.height, x * -tickgap)
-                
-            }
+            stroke(50)
+            line(0, x * -tickgap, -this.height, x * -tickgap)
+            
             noStroke();
             if (_labels) {
                 textSize(15);
@@ -155,32 +147,19 @@ class BarChart {
         for (let x = 0; x < this.data.length; x++) {
             fill(200);
             stroke(200);
-            if (_rotation < 45) {
-                line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
+            line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
+            stroke(50)
+            line(0, (x+1) * -tickgap, this.height, (x+1) * -tickgap)
                 
-                    stroke(50)
-                    line(0, (x+1) * -tickgap, this.height, (x+1) * -tickgap)
-                
-            } else {
-                line(0, x * -tickgap, _lengthTicks, x * -tickgap);
-             
-                    stroke(50)
-                    line(0, (x+1) * -tickgap, -this.height, (x+1) * -tickgap)
-                
-            }
+           
             noStroke();
 
 
             if (_labels) {
                 textSize(15);
                 textAlign(RIGHT, CENTER);
-                // text((x * numGap), -10, x * -tickgap);
-                if (_rotation < 45) {
-                    text(table.getRows()[x].arr[0], -_lengthTicks, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
-                    
-                } else {
-                    text(table.getRows()[x].arr[0], 40, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
-                }
+               
+                text(table.getRows()[x].arr[0], -_lengthTicks, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
             };
         }
         pop();

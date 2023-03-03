@@ -52,7 +52,7 @@ class Stacked {
             translate(this.marginLeft + (x * this.masterGap), 0)
             noStroke()
             // fill(this.data1[x]+50, 100 ,100) 
-            fill(239,71,111)
+            fill(78, 168, 222)
             rect(this.posX, this.posY, this.blockWidth, this.scale(-this.data1[x]));
 
             
