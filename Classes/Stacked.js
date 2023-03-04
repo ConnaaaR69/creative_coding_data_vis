@@ -77,15 +77,14 @@ class Stacked {
      * @param {number} _lengthTicks - Length of Y axis marker ticks
      * @param {boolean} _grid - Enable or disable gridlines
     */
-      drawYAxis(_rotation = 0, _labels = true, _lengthTicks = 10) {
+      drawYAxis( _labels = true, _lengthTicks = 10) {
         let _numTicks = this.data1.length
         let tickgap = this.height / (_numTicks);
         push();
 
         translate(this.posX, this.posY);
-        angleMode(DEGREES);
-        rotate(_rotation);
         stroke(100);
+        textStyle(BOLD);
         strokeWeight(1);
         line(0, 0, 0, -this.height);
         // line(0, 0, this.width, 0);
@@ -108,8 +107,14 @@ class Stacked {
                 
                 textAlign(RIGHT, CENTER);
                 text(table.getRows()[x].arr[0], -_lengthTicks, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
+               
             }
         }
+            push()
+            rotate(90)
+            textAlign(CENTER, CENTER);
+            text(`${table.columns[0]}`,-this.height/2, _lengthTicks * 8)
+            pop()
         pop();
 
     }
@@ -123,7 +128,7 @@ class Stacked {
         translate(this.posX, this.posY);
         angleMode(DEGREES);
         rotate(_rotation);
-       
+        textStyle(BOLD);
         stroke(100);
         strokeWeight(1);
         line(0, 0, 0, -this.height);
@@ -146,6 +151,11 @@ class Stacked {
                 text(Math.round((x * numGap) / 5) * 5, _lengthTicks, x * -tickgap);
             };
         }
+            push()
+            rotate(-90)
+            textAlign(CENTER, CENTER);
+            text(`${table.columns[1]} (Bottom) \n & ${table.columns[2]} (Top)`, this.width/4 + this.height/4,-this.height/2 + this.width/2 + 65)
+            pop()
         pop();
     }
 
@@ -158,18 +168,6 @@ class Stacked {
 
         //Chart Heading
         text(`${_title}`, this.posX + this.width/2, this.posY - this.height - 40 )
-
-        //text style resets
-        textSize(15);
-        textStyle(NORMAL);
-        text(`${table.columns[0]}`,this.posX + this.width /2, this.posY + 50)
-        push()
-        
-        // translate(this.posY,this.posX)
-        // rotate(20)
-        text(table.columns[0] + 'aaaaaaaaaaaaaaaaaaaaaaa' ,0 , 0)
-        
-        pop()
     }
 
 }

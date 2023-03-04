@@ -70,12 +70,12 @@ class BarChart {
         //text style resets
         textSize(15);
         textStyle(NORMAL);
-        text(`${table.columns[2]}`,this.posX + this.width/6, this.posY + 50)
+        
         push()
         
         translate(this.posY + 40,this.posX)
         rotate(90)
-        text(table.columns[0] ,this.posX , this.posY)
+       
         
         pop()
     }
@@ -89,15 +89,14 @@ class BarChart {
      * @param {number} _lengthTicks - length of Y axis marker ticks
      * @param {boolean} _grid - enable or disable gridlines
      */
-    drawYAxis(_rotation = 0, _labels = true, _lengthTicks = 10) {
+    drawYAxis( _labels = true, _lengthTicks = 10) {
         let _numTicks = this.data.length
         let tickgap = this.height / (_numTicks);
         let numGap = this.maxValue / (_numTicks);
         push();
 
         translate(this.posX, this.posY);
-        angleMode(DEGREES);
-        rotate(_rotation);
+
         stroke(100);
         strokeWeight(1);
         line(0, 0, 0, -this.height);
@@ -119,6 +118,11 @@ class BarChart {
                 text(Math.round((x * numGap) / 5) * 5, -10, x * -tickgap);
             };
         }
+        push()
+            rotate(90)
+            textAlign(CENTER, CENTER);
+            text(`${table.columns[2]}`,-this.height/2, _lengthTicks * 8)
+            pop()
         pop();
 
     }
@@ -159,6 +163,10 @@ class BarChart {
             pop()
             };
         }
+            push()
+            textAlign(CENTER, CENTER);
+            text(`${table.columns[0]}`, this.width/4 + this.height/4,-this.height/2 + this.width/2 + 65)
+            pop()
         pop();
     }
 }

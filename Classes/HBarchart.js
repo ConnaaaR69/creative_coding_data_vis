@@ -65,18 +65,6 @@ class HBarChart {
 
         //Chart Heading
         text(`${_title}`, this.posX + this.width/2, this.posY - this.height - 40 )
-
-        //text style resets
-        textSize(15);
-        textStyle(NORMAL);
-        text(`${table.columns[1]}`,this.posX + this.width/6, this.posY + 50)
-        push()
-        
-        translate(this.posY + 40,this.posX)
-        rotate(90)
-        // text(table.columns[0] ,this.posX , this.posY)
-        
-        pop()
     }
 
 
@@ -88,14 +76,13 @@ class HBarChart {
      * @param {number} _lengthTicks - length of Y axis marker ticks
      * @param {boolean} _grid - enable or disable gridlines
      */
-    drawYAxis(_rotation = 0, _labels = true, _lengthTicks = 10) {
+    drawYAxis( _labels = true, _lengthTicks = 10) {
         let _numTicks = this.data.length
         let tickgap = this.height / (_numTicks);
         push();
 
         translate(this.posX, this.posY);
-        angleMode(DEGREES);
-        rotate(_rotation);
+        textStyle(BOLD);
         stroke(100);
         strokeWeight(1);
         line(0, 0, 0, -this.height);
@@ -103,8 +90,8 @@ class HBarChart {
 
         //draws ticks
  
-        for (let x = 0; x < this.data.length; x++) {
-            
+        for (let x = 0; x < _numTicks; x++) {
+            //tick marks
             fill(200);
             stroke(200);
             line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
@@ -116,11 +103,15 @@ class HBarChart {
             
             if (_labels) {
                 // series label
-                
                 textAlign(RIGHT, CENTER);
                 text(table.getRows()[x].arr[0], -_lengthTicks, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
             }
         }
+        push()
+            rotate(90)
+            textAlign(CENTER, CENTER);
+            text(`${table.columns[0]}`,-this.height/2, _lengthTicks * 8)
+            pop()
         pop();
 
     }
@@ -132,6 +123,7 @@ class HBarChart {
         
         push();
         translate(this.posX, this.posY);
+        textStyle(BOLD);
         angleMode(DEGREES);
         rotate(_rotation);
        
@@ -147,7 +139,7 @@ class HBarChart {
             stroke(200);
             line(0, x * -tickgap, _lengthTicks, x * -tickgap);
             stroke(50)
-            line(0, x * -tickgap, -this.height, x * -tickgap)
+            line(0, x * -tickgap,-this.height, x * -tickgap)
             noStroke();
 
 
@@ -157,6 +149,11 @@ class HBarChart {
                 text(Math.round((x * numGap) / 5) * 5, _lengthTicks, x * -tickgap);
             };
         }
+            push()
+            rotate(-90)
+            textAlign(CENTER, CENTER);
+            text(`${table.columns[2]}`, this.width/4 + this.height/4,-this.height/2 + this.width/2 + 65)
+            pop()
         pop();
     }
 }

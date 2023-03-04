@@ -83,7 +83,7 @@ class Linechart {
      * @param {number} _lengthTicks - length of Y axis marker ticks
      * @param {boolean} _grid - enable or disable gridlines
      */
-    drawYAxis(_rotation = 0, _labels = true, _lengthTicks = 10) {
+    drawYAxis(_labels = true, _lengthTicks = 10) {
         let _numTicks = this.data1.length
         let tickgap = this.height / (_numTicks);
         let numGap = this.maxValue / (_numTicks);
@@ -91,7 +91,7 @@ class Linechart {
 
         translate(this.posX, this.posY);
         angleMode(DEGREES);
-        rotate(_rotation);
+        
         stroke(100);
         strokeWeight(1);
         line(0, 0, 0, -this.height);
@@ -101,20 +101,12 @@ class Linechart {
  
         for (let x = 0; x < _numTicks + 1; x++) {
             fill(200);
-           
             stroke(200);
-            if (_rotation < 45) {
-                line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
-                
-                    stroke(50)
-                    line(0, x * -tickgap, this.height, x * -tickgap)
-                
-            } else {
-                line(0, x * -tickgap, _lengthTicks, x * -tickgap);
-                    stroke(50)
-                    line(0, x * -tickgap, -this.height, x * -tickgap)
-                
-            }
+            
+            line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
+            stroke(50)
+            line(0, x * -tickgap, this.height, x * -tickgap)
+            
             noStroke();
             if (_labels) {
                 textSize(15);
@@ -123,6 +115,11 @@ class Linechart {
                 text(Math.round((x * numGap) / 5) * 5, -10, x * -tickgap);
             };
         }
+        push()
+            rotate(90)
+            textAlign(CENTER, CENTER);
+            text(`${table.columns[1]} (Bottom) \n & ${table.columns[2]} (top)`,-this.height/2, _lengthTicks * 8)
+            pop()
         pop();
 
     }
@@ -155,6 +152,11 @@ class Linechart {
                 text(table.getRows()[x].arr[0], 40, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
             };
         }
+            push()
+            rotate(-90)
+            textAlign(CENTER, CENTER);
+            text(`${table.columns[0]}`, this.width/4 + this.height/4,-this.height/2 + this.width/2 + 65)
+            pop()
         pop();
     }
 
@@ -166,17 +168,5 @@ class Linechart {
 
         //Chart Heading
         text(`${_title}`, this.posX + this.width/2, this.posY - this.height - 40 )
-
-        //text style resets
-        textSize(15);
-        textStyle(NORMAL);
-        text(`${table.columns[1]}`,this.posX + this.width/6, this.posY + 50)
-        push()
-        
-        translate(this.posY + 40,this.posX)
-        rotate(90)
-        text(table.columns[0] ,this.posX , this.posY)
-        
-        pop()
     }
 }

@@ -6,22 +6,26 @@ class PieChart {
         this.posY = _posY - (_diameter/2);
         this.diameter = _diameter;
         
+        
     }
 
     /**
     * Draws a pie chart with given data array
     */
     render() {
+        
         //Gets percentage change of values between years and converts data array
         let changePer = this.data.map((i,v) => {
             if (v == 0) {
-                return;
+                return; 
             }
             let previousVal = this.data[v-1];
+            
             return((i - previousVal)  / previousVal) *100
         }).filter(Boolean)
+        
         this.data = changePer;
-
+        console.log(this.data)
        
         let total = 0; //gets total number of segments to be created
         this.data.forEach(i => total += Math.abs(i));// gets total of data array
@@ -30,7 +34,7 @@ class PieChart {
         let prevDeg = 0 // for text placement
         
         //iterates for the length of the data array
-        for (let i = 0; i < 13; i++) {
+        for (let i = 0; i < this.data.length; i++) {
             //gets degrees of circle from array, converts to whole, non negative float
             let degrees = (Math.abs(this.data[i]) / total) * 360;
             prevDeg += degrees;
