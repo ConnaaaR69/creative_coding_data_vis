@@ -33,7 +33,6 @@ class BarChart {
      */
     scale(_num) {
         let scaleValue = this.height / this.maxValue;
-        // console.log('scaling!')
         return _num * scaleValue
 
     }
@@ -44,7 +43,7 @@ class BarChart {
      * @param {number} _rotation - rotates the graph, currently only 0 and 90 supported
      */
     drawData() {
-        // console.log('Drawing!')
+        // Draws Bars 
         for (let x = 0; x < this.data.length; x++) {
             push();
             translate(this.posX, this.posY)
@@ -52,7 +51,6 @@ class BarChart {
             noStroke()
             fill(78, 168, 222)
             rect(0, 0, this.blockWidth, this.scale(-this.data[x]));
-
             pop();
         }
 
@@ -72,11 +70,8 @@ class BarChart {
         textStyle(NORMAL);
         
         push()
-        
         translate(this.posY + 40,this.posX)
         rotate(90)
-       
-        
         pop()
     }
 

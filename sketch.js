@@ -63,7 +63,7 @@ function draw(){
     /////
 
     // piechart
-    pie.render()
+    pie.render('Percentage Change in Education Earnings YoY')
     /////
    
     // stacked Linechart

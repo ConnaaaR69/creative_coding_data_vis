@@ -5,27 +5,30 @@ class PieChart {
         this.posX = _posX + (_diameter/2); 
         this.posY = _posY - (_diameter/2);
         this.diameter = _diameter;
-        
-        
     }
-
+    drawLegend(_title){
+        textAlign(CENTER,CENTER)
+        text(_title, this.posX,this.posY - this.diameter/2 - this.diameter/4)
+    }
     /**
     * Draws a pie chart with given data array
     */
-    render() {
-        
+    render(_title) {
+        this.drawLegend(_title)
         //Gets percentage change of values between years and converts data array
-        let changePer = this.data.map((i,v) => {
-            if (v == 0) {
+        let changePer = this.data.map((v,i) => {
+            console.log(i)
+            //dont calc on first index
+            if (i == 0) {
                 return; 
             }
-            let previousVal = this.data[v-1];
+            //get prev value to compare to
+            let previousVal = this.data[i-1];
             
-            return((i - previousVal)  / previousVal) *100
+            return((v - previousVal)  / previousVal) *100
         }).filter(Boolean)
-        
         this.data = changePer;
-        console.log(this.data)
+        // console.log(this.data)
        
         let total = 0; //gets total number of segments to be created
         this.data.forEach(i => total += Math.abs(i));// gets total of data array
@@ -74,6 +77,9 @@ class PieChart {
             text(table.rows[i].arr[0], 0,(this.diameter / 2 )+(this.diameter / 20+20))
             
             pop()
+
+            
         }
+        
     }
 }
