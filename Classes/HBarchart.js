@@ -79,17 +79,18 @@ class HBarChart {
     drawYAxis( _labels = true, _lengthTicks = 10) {
         let _numTicks = this.data.length
         let tickgap = this.height / (_numTicks);
-        push();
+        let reverseArray = table.getColumn('Year');
+        reverseArray.reverse();
 
+        push();
         translate(this.posX, this.posY);
         textStyle(BOLD);
         stroke(100);
         strokeWeight(1);
         line(0, 0, 0, -this.height);
-        // line(0, 0, this.width, 0);
 
         //draws ticks
- 
+        
         for (let x = 0; x < _numTicks; x++) {
             //tick marks
             fill(200);
@@ -104,7 +105,8 @@ class HBarChart {
             if (_labels) {
                 // series label
                 textAlign(RIGHT, CENTER);
-                text(table.getRows()[x].arr[0], -_lengthTicks, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
+                console.log(reverseArray)
+                text(reverseArray[x], -_lengthTicks, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
             }
         }
         push()
@@ -113,7 +115,7 @@ class HBarChart {
             text(`${table.columns[0]}`,-this.height/2, _lengthTicks * 8)
             pop()
         pop();
-
+        ;
     }
     drawXAxis(_rotation = 90, _labels = true, _lengthTicks = 10) {
         

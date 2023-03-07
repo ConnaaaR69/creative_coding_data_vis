@@ -44,21 +44,20 @@ class Stacked {
      * Draws the bars for the bar chart with the data defined in the data attribute
      */
     drawData() {
+        // let colourIndex = ['#E27396','#EA9AB2','#EFCFE3','#EAF2D7','#B3DEE2',]
         for (let x = 0; x < this.data1.length; x++) {
+        //     let colour = random(colourIndex);
+        //     let index = colourIndex.indexOf(colour);
+        //     if(index > -1) {
+        //         colourIndex.splice(index, 1);
+        //     }
             push();
-            // ellipse(this.posX,this.posY,25)
-            // // translate(this.posX, this.posY)
-            // rotate(20)
-            // translate(-this.width+(this.marginLeft + (x * this.masterGap)), 0)
-            // noStroke()
-            // // fill(this.data1[x]+50, 100 ,100) 
-            // fill(78, 168, 222)
-            // rect(this.posX, this.posY, this.blockWidth, this.scale(-this.data1[x]));
             translate(this.posX, this.posY)
             rotate(90)
             translate(-this.width+(this.marginLeft + (x * this.masterGap)), 0)
             noStroke()
             fill(78, 168, 222)
+            // fill(colour);
             rect(0, 0, this.blockWidth, this.scale(-this.data1[x]));
 
             for(let i = 0; i < this.data2.length; i++){
@@ -80,6 +79,8 @@ class Stacked {
       drawYAxis( _labels = true, _lengthTicks = 10) {
         let _numTicks = this.data1.length
         let tickgap = this.height / (_numTicks);
+        let reverseArray = table.getColumn('Year');
+        reverseArray.reverse();
         push();
 
         translate(this.posX, this.posY);
@@ -91,6 +92,7 @@ class Stacked {
 
         //draws ticks
  
+
         for (let x = this.data1.length-1; x >= 0; x--) {
             console.log(x)
             fill(200);
@@ -106,7 +108,7 @@ class Stacked {
                 // series label
                 
                 textAlign(RIGHT, CENTER);
-                text(table.getRows()[x].arr[0], -_lengthTicks, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
+                text(reverseArray[x], -_lengthTicks, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
                
             }
         }
