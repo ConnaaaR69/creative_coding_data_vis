@@ -6,13 +6,14 @@ class HBarChart {
         this.posX = _posX;
         this.posY = _posY;
         this.data = _data;
-        this.maxValue = Math.max(...this.data)
-        this.numBlocks = this.data.length
-        this.blockGap = _blockGap
+        this.maxValue = this.calculateMax();
+        this.minValue = Math.min(...this.data);
+        this.numBlocks = this.data.length;
+        this.blockGap = _blockGap;
         this.marginLeft = _marginL;
         this.marginRight = _marginR;
         this.blockWidth = (this.width - (this.marginLeft + this.marginRight) - ((this.numBlocks - 1) * this.blockGap)) / this.numBlocks;
-        this.masterGap = this.blockWidth + this.blockGap
+        this.masterGap = this.blockWidth + this.blockGap;
     }
 
     /**
@@ -33,7 +34,6 @@ class HBarChart {
      */
     scale(_num) {
         let scaleValue = this.height / this.maxValue;
-        // console.log('scaling!')
         return _num * scaleValue
 
     }
@@ -44,20 +44,26 @@ class HBarChart {
      * @param {number} _rotation - rotates the graph, currently only 0 and 90 supported
      */
     drawData() {
-        // console.log('Drawing!')
         for (let x = 0; x < this.data.length; x++) {
             push();
             translate(this.posX, this.posY)
             rotate(90)
             translate(-this.width+(this.marginLeft + (x * this.masterGap)), 0)
             noStroke()
-            fill(78, 168, 222)
+            let c = map(this.data[x], this.minValue, this.maxValue,90, 200)
+            fill(61, c, 210)
             rect(0, 0, this.blockWidth, this.scale(-this.data[x]));
             pop();
         }
     }
 
+    /**
+     * @param {string} _title Title of Chart in string format
+     */
     drawLegend(_title){
+        if(!typeof _title === "string"){
+            throw ('Chart Title is Not a String!')
+        }
         fill(200)
         textSize(18);
         textStyle(BOLD);
@@ -67,6 +73,18 @@ class HBarChart {
         text(`${_title}`, this.posX + this.width/2, this.posY - this.height - 40 )
     }
 
+    calculateMax() {
+        let max = 0;
+        max = Math.max(...this.data)
+        let TotalNum = 1750;
+        for(let x = max; x < TotalNum; x++) {
+            if(x % this.data.length==0 && x % 100==0) {
+                max = x;
+                break;
+            }
+        }
+        return max;
+    }
 
 
     /**
@@ -105,14 +123,14 @@ class HBarChart {
             if (_labels) {
                 // series label
                 textAlign(RIGHT, CENTER);
-                console.log(reverseArray)
                 text(reverseArray[x], -_lengthTicks, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
             }
         }
         push()
             rotate(90)
             textAlign(CENTER, CENTER);
-            text(`${table.columns[0]}`,-this.height/2, _lengthTicks * 8)
+            textSize(12)
+            text(`${table.columns[0]}`,-this.height/2, _lengthTicks * 5)
             pop()
         pop();
         ;
@@ -154,7 +172,9 @@ class HBarChart {
             push()
             rotate(-90)
             textAlign(CENTER, CENTER);
-            text(`${table.columns[2]}`, this.width/4 + this.height/4,-this.height/2 + this.width/2 + 65)
+            textSize(12)
+            
+            text(`${table.columns[2]}`, this.width/4 + this.height/4, _lengthTicks * 5)
             pop()
         pop();
     }

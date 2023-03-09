@@ -6,13 +6,15 @@ class BarChart {
         this.posX = _posX;
         this.posY = _posY;
         this.data = _data;
-        this.maxValue = Math.max(...this.data)
+        this.maxValue = this.calculateMax();
+        this.minValue = Math.min(...this.data);
         this.numBlocks = this.data.length
         this.blockGap = _blockGap
         this.marginLeft = _marginL;
         this.marginRight = _marginR;
         this.blockWidth = (this.width - (this.marginLeft + this.marginRight) - ((this.numBlocks - 1) * this.blockGap)) / this.numBlocks;
         this.masterGap = this.blockWidth + this.blockGap
+        this.scaleval  = 0
     }
 
     /**
@@ -25,18 +27,54 @@ class BarChart {
         this.drawData(); 
     }
 
+    scaleData(arr){
+        //Value, Index, Array VV
+        let data = arr.map((v,i,a) => i ? Math.abs(v - a[i-1]) : Math.abs(0 - v))
+        data.shift()
 
+
+        //reassign values
+        this.data = data
+        this.numBlocks = data.length
+        this.blockWidth = (this.width - (this.marginLeft + this.marginRight) - ((this.numBlocks - 1) * this.blockGap)) / this.numBlocks;
+        this.masterGap = this.blockWidth + this.blockGap
+        this.maxValue = Math.max(...data);
+        
+        
+    }
     /**
      * Scales values to fit chart, used in the drawData method.
      * @param {number} _num 
      * @returns 
      */
     scale(_num) {
-        let scaleValue = this.height / this.maxValue;
-        return _num * scaleValue
-
+        let scaleValue = this.height / this.maxValue ;
+        return (_num * scaleValue)  
     }
 
+    calculateMax() {
+        let max = 0;
+        max = Math.max(...this.data)
+        let TotalNum = 2000;
+        for(let x = max; x < TotalNum; x++) {
+            if(x % this.data.length==0 && x % 100==0) {
+                max = x;
+                break;
+            }
+        }
+        return max;
+    }
+
+    drawGradient(x,y,w,h,c1,c2){
+       
+            // Top to bottom gradient
+            for (let i = y; i <= y + h; i++) {
+              let inter = map(i, y, y + h, 0, 1);
+              let c = lerpColor(c1, c2, inter);
+              stroke(c);
+              line(x, i, x + w, i);
+            }
+    }
 
     /**
      * Draws the bars for the bar chart with the data defined in the data attribute
@@ -44,19 +82,27 @@ class BarChart {
      */
     drawData() {
         // Draws Bars 
+        // this.scaleData(this.data)
+        // this.maxValue = Math.abs(Math.max(...this.data))
         for (let x = 0; x < this.data.length; x++) {
             push();
             translate(this.posX, this.posY)
             translate(this.marginLeft + (x * this.masterGap), 0)
             noStroke()
-            fill(78, 168, 222)
-            rect(0, 0, this.blockWidth, this.scale(-this.data[x]));
+            let c = map(this.data[x], this.minValue, this.maxValue,90, 200)
+            fill(61, c, 210)
+            rect(0, 0, this.blockWidth, this.scale(int(-this.data[x])));
             pop();
         }
-
     }
 
+    /**
+     * @param {string} _title Title of Chart in string format
+     */
     drawLegend(_title){
+        if(!typeof _title === "string"){
+            throw ('Chart Title is Not a String!')
+        }
         fill(200)
         textSize(18);
         textStyle(BOLD);
@@ -79,19 +125,18 @@ class BarChart {
 
     /**
      * Draws the axis lines of a bar chart
-     * @param {number} _rotation - enter a number between 0 - 359 for rotation
      * @param {boolean} _labels - enable Y Axis data labels
      * @param {number} _lengthTicks - length of Y axis marker ticks
-     * @param {boolean} _grid - enable or disable gridlines
      */
     drawYAxis( _labels = true, _lengthTicks = 10) {
         let _numTicks = this.data.length
         let tickgap = this.height / (_numTicks);
         let numGap = this.maxValue / (_numTicks);
-        push();
 
+        push();
         translate(this.posX, this.posY);
 
+        //Draw Axis line
         stroke(100);
         strokeWeight(1);
         line(0, 0, 0, -this.height);
@@ -101,47 +146,48 @@ class BarChart {
             fill(200);
             stroke(200);
             line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
+
+            //grid line
             stroke(50)
             line(0, x * -tickgap, this.height, x * -tickgap)
             noStroke();
 
-
             if (_labels) {
+                // Axis Values
                 textSize(15);
-                // series label
                 textAlign(RIGHT, CENTER);
                 text(Math.round((x * numGap) / 5) * 5, -10, x * -tickgap);
             };
         }
         push()
+            //Axis Label
             rotate(90)
             textAlign(CENTER, CENTER);
-            text(`${table.columns[2]}`,-this.height/2, _lengthTicks * 8)
+            textSize(12)
+            text(`${table.columns[2]}`,-this.height/2, _lengthTicks * 5)
             pop()
         pop();
 
     }
     drawXAxis( _labels = true, _lengthTicks = 10) {
-        let _numTicks = this.data.length
-        let tickgap = this.height / (_numTicks);
+        let _numTicks = this.data.length -1
+        let tickgap = this.width / _numTicks;
 
         push();
         translate(this.posX, this.posY);
         angleMode(DEGREES);
         
-
+        //Draw Axis Line
         stroke(100);
         strokeWeight(1);
-        //axis line
         line(0, 0, this.width, 0);
 
         //draws ticks
-        for (let x = 0; x < this.data.length; x++) {
+        for (let x = 0; x < this.data.length -1; x++) {
             fill(200);
-            
             //tick marks
             stroke(200);
-            line(x * tickgap, 0, x * tickgap, _lengthTicks); 
+            line(this.marginLeft + (x * this.masterGap), 0, this.marginLeft + (x * this.masterGap), _lengthTicks); 
 
             //grid
             stroke(50)
@@ -150,17 +196,21 @@ class BarChart {
 
 
             if (_labels) {
+            //Scale Values
             textSize(15);
             textAlign(RIGHT, CENTER);
             push()
             rotate(90)
-            text(table.getRows()[x].arr[0], 45,-(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
+            //Series Labels
+            text(table.getRows()[x].arr[0], 45,(-x * tickgap) - (this.blockWidth/2));
             pop()
             };
         }
             push()
             textAlign(CENTER, CENTER);
-            text(`${table.columns[0]}`, this.width/4 + this.height/4,-this.height/2 + this.width/2 + 65)
+            textSize(12)
+            // Axis Label
+            text(`${table.columns[0]}`, this.width/4 + this.height/4, _lengthTicks * 6)
             pop()
         pop();
     }

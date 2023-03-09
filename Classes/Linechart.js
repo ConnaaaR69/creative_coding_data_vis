@@ -35,7 +35,6 @@ class Linechart {
      */
     scale(_num) {
         let scaleValue = this.height / this.maxValue;
-        // console.log('scaling!')
         return _num * scaleValue
 
     }
@@ -51,26 +50,32 @@ class Linechart {
             translate(this.marginLeft + (x * this.masterGap), 0)
             noStroke()
             
-            fill(78, 168, 222)
+            let c = map(this.data1[x], Math.min(...this.data1), Math.max(...this.data1),90, 200);
+            fill(61, c, 210)
             rect(this.posX, this.posY, this.blockWidth, this.scale(-this.data1[x]));
 
+            strokeWeight(1.5)
+            stroke(40)
+            c = map(this.data2[x], Math.min(...this.data2), Math.max(...this.data2),90, 200);
+            fill(61, c, 210)
             for(let i = 0; i < this.data2.length; i++){
-                
-                fill(41,131,163)
                 rect(this.posX, this.posY-this.scale(this.data1[x]),this.blockWidth,this.scale(-this.data2[i]))
             }
             
             //draw comparison median line
-            if (x >= 1) {
-                stroke(138, 48, 162)
+            if (x > 0) {
+                stroke(180)
+                fill(180)
                 strokeWeight(3);
                 
                 translate(this.posX, this.posY)
                 line(this.blockWidth / 2 - this.masterGap, this.scale(-this.data1[x-1])-this.scale(-this.data2[x-1])/2, this.blockWidth / 2, this.scale(-this.data1[x])-this.scale(-this.data2[x])/2)
+                
             }
-            //draw mean line dots
-            fill(138, 48, 162);
             ellipse(this.blockWidth / 2, this.scale(-this.data1[x])-this.scale(-this.data2[x])/2, 5, 5)
+            //draw mean line dots
+            // fill(138, 48, 162);
+            
            
             pop();
         }
@@ -118,7 +123,8 @@ class Linechart {
         push()
             rotate(90)
             textAlign(CENTER, CENTER);
-            text(`${table.columns[1]} (Bottom) \n & ${table.columns[2]} (top)`,-this.height/2, _lengthTicks * 8)
+            textSize(12)
+            text(`${table.columns[1]} (Bottom) \n & ${table.columns[2]} (top)`,-this.height/2, _lengthTicks * 6)
             pop()
         pop();
 
@@ -155,14 +161,22 @@ class Linechart {
             push()
             rotate(-90)
             textAlign(CENTER, CENTER);
-            text(`${table.columns[0]}`, this.width/4 + this.height/4,-this.height/2 + this.width/2 + 65)
+            textSize(12)
+            text(`${table.columns[0]}`, this.width/4 + this.height/4,-this.height/2 + this.width/2 + 50)
             pop()
         pop();
     }
 
+    /**
+     * @param {string} _title Title of Chart in string format
+     */
     drawLegend(_title){
+        if(!typeof _title === "string"){
+            throw ('Chart Title is Not a String!')
+        }
         fill(200)
         textSize(18);
+        
         textStyle(BOLD);
         textAlign(CENTER,CENTER)
 

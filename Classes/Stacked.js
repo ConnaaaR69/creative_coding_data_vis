@@ -7,6 +7,7 @@ class Stacked {
         this.data1 = _data1;
         this.data2 = _data2;
         this.maxValue = Math.max(...this.data1) + Math.max(...this.data2);
+        this.minValue = Math.min(...this.data1) + Math.min(...this.data2);
         this.numBlocks = this.data1.length
         this.blockGap = _blockGap
         this.marginLeft = _marginL;
@@ -16,9 +17,10 @@ class Stacked {
 
     }
     
+    //// Util Methods ////
 
     /**
-     * This renders the barchart in its entireity if no optional values for drawData and drawAxis methods need passing
+     * @param {string} _title set title for chart
      */
     render(_title) {
        this.drawXAxis();
@@ -35,10 +37,12 @@ class Stacked {
      */
     scale(_num) {
         let scaleValue = this.height / this.maxValue;
-        // console.log('scaling!')
         return _num * scaleValue
-
     }
+    
+
+
+    //// Draw Methods ////
 
     /**
      * Draws the bars for the bar chart with the data defined in the data attribute
@@ -56,14 +60,25 @@ class Stacked {
             rotate(90)
             translate(-this.width+(this.marginLeft + (x * this.masterGap)), 0)
             noStroke()
-            fill(78, 168, 222)
+            let c = map(this.data1[x], Math.min(...this.data1), Math.max(...this.data1),90, 200);
+           
+            fill(61, c, 210)
+            // fill(78, 168, 222)
             // fill(colour);
             rect(0, 0, this.blockWidth, this.scale(-this.data1[x]));
+          
+            strokeWeight(0.5)
+            stroke(40)
 
+            let c2 = map(this.data2[x], Math.min(...this.data2), Math.max(...this.data2),90, 200);
+       
+            fill(61, c2, 210)
             for(let i = 0; i < this.data2.length; i++){
 
-                fill(41,131,163)
+                
+                // fill(41,131,163)
                 rect(0, -this.scale(this.data1[x]),this.blockWidth,this.scale(-this.data2[i]))
+                
             }
             pop();
         }
@@ -71,12 +86,10 @@ class Stacked {
 
     /**
      * Draws the axis lines of a bar chart
-     * @param {number} _rotation - Enter a number between 0 - 359 for rotation
      * @param {boolean} _labels - Enable Y Axis data labels
      * @param {number} _lengthTicks - Length of Y axis marker ticks
-     * @param {boolean} _grid - Enable or disable gridlines
     */
-      drawYAxis( _labels = true, _lengthTicks = 10) {
+    drawYAxis( _labels = true, _lengthTicks = 10) {
         let _numTicks = this.data1.length
         let tickgap = this.height / (_numTicks);
         let reverseArray = table.getColumn('Year');
@@ -88,13 +101,10 @@ class Stacked {
         textStyle(BOLD);
         strokeWeight(1);
         line(0, 0, 0, -this.height);
-        // line(0, 0, this.width, 0);
 
-        //draws ticks
- 
-
+        //draws ticks & grid
         for (let x = this.data1.length-1; x >= 0; x--) {
-            console.log(x)
+            //ticks
             fill(200);
             stroke(200);
             line(0, x * -tickgap, -_lengthTicks, x * -tickgap);
@@ -106,7 +116,6 @@ class Stacked {
             
             if (_labels) {
                 // series label
-                
                 textAlign(RIGHT, CENTER);
                 text(reverseArray[x], -_lengthTicks, -(this.marginLeft + (this.blockWidth / 2) + (x * this.masterGap)));
                
@@ -115,11 +124,18 @@ class Stacked {
             push()
             rotate(90)
             textAlign(CENTER, CENTER);
-            text(`${table.columns[0]}`,-this.height/2, _lengthTicks * 8)
+            textSize(12)
+            text(`${table.columns[0]}`,-this.height/2, _lengthTicks * 5)
             pop()
         pop();
 
     }
+
+    /**
+     * @param {number} _rotation rotation of x axis, defaults to 90
+     * @param {boolean} _labels toggle axis labels
+     * @param {number} _lengthTicks length of the axis graduation marks in      pixels
+     */
     drawXAxis(_rotation = 90, _labels = true, _lengthTicks = 10) {
         
         let _numTicks = this.data1.length
@@ -156,13 +172,19 @@ class Stacked {
             push()
             rotate(-90)
             textAlign(CENTER, CENTER);
-            text(`${table.columns[1]} (Bottom) \n & ${table.columns[2]} (Top)`, this.width/4 + this.height/4,-this.height/2 + this.width/2 + 65)
+            textSize(12)
+            text(`${table.columns[1]} (Bottom) \n & ${table.columns[2]} (Top)`, this.width/4 + this.height/4, _lengthTicks * 6)
             pop()
         pop();
     }
 
-
+    /**
+     * @param {string} _title Title of Chart in string format
+     */
     drawLegend(_title){
+        if(!typeof _title === "string"){
+            throw ('Chart Title is Not a String!')
+        }
         fill(200)
         textSize(18);
         textStyle(BOLD);
