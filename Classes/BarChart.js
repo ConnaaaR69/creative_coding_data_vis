@@ -6,7 +6,7 @@ class BarChart {
         this.posX = _posX;
         this.posY = _posY;
         this.data = _data;
-        this.maxValue = this.calculateMax();
+        this.maxValue = this.scaleMax();
         this.minValue = Math.min(...this.data);
         this.numBlocks = this.data.length
         this.blockGap = _blockGap
@@ -27,6 +27,10 @@ class BarChart {
         this.drawData(); 
     }
 
+    /**
+     * 
+     * @param {Array} arr - data to be scaled
+     */
     scaleData(arr){
         //Value, Index, Array VV
         let data = arr.map((v,i,a) => i ? Math.abs(v - a[i-1]) : Math.abs(0 - v))
@@ -42,17 +46,22 @@ class BarChart {
         
         
     }
+
     /**
-     * Scales values to fit chart, used in the drawData method.
+     * Scales individual values to fit chart, used in the drawData method.
      * @param {number} _num 
-     * @returns 
+     * @returns float for data elements to be multiplied by to scale data inside chart
      */
     scale(_num) {
         let scaleValue = this.height / this.maxValue ;
         return (_num * scaleValue)  
     }
 
-    calculateMax() {
+    /**
+     * Helps scale axis for even, nice looking scale labels
+     * @returns new max value that scales evenly between data length and 100
+     */
+    scaleMax() {
         let max = 0;
         max = Math.max(...this.data)
         let TotalNum = 2000;

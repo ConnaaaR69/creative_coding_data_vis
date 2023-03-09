@@ -1,4 +1,5 @@
 class Linechart {
+    
     constructor(_height, _width, _posX, _posY, _data1,_data2, _marginL, _marginR, _blockGap) {
         this.height = _height;
         this.width = _width;
@@ -18,9 +19,9 @@ class Linechart {
 
     /**
      * This renders the barchart in its entireity if no optional values for drawData and drawAxis methods need passing
+     * @param {string} _title the title of the chart
      */
     render(_title) {
-       
         this.drawYAxis()
         this.drawXAxis()
         this.drawLegend(_title)
@@ -38,7 +39,6 @@ class Linechart {
         return _num * scaleValue
 
     }
-
 
     /**
      * Draws the bars for the bar chart with the data defined in the data attribute
@@ -129,6 +129,12 @@ class Linechart {
         pop();
 
     }
+    /**
+     * 
+     * @param {number} _rotation defaults to 90, sets the rotation of the x axis line
+     * @param {boolean} _labels Toggles axis values
+     * @param {number} _lengthTicks Sets length of axis graduations
+     */
     drawXAxis(_rotation = 90, _labels = true, _lengthTicks = 10) {
         let _numTicks = this.data1.length
         let tickgap = this.height / (_numTicks);
@@ -168,7 +174,7 @@ class Linechart {
     }
 
     /**
-     * @param {string} _title Title of Chart in string format
+     * @param {String} _title Title of Chart in string format
      */
     drawLegend(_title){
         if(!typeof _title === "string"){

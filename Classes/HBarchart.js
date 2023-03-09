@@ -6,7 +6,7 @@ class HBarChart {
         this.posX = _posX;
         this.posY = _posY;
         this.data = _data;
-        this.maxValue = this.calculateMax();
+        this.maxValue = this.scaleMax();
         this.minValue = Math.min(...this.data);
         this.numBlocks = this.data.length;
         this.blockGap = _blockGap;
@@ -73,7 +73,7 @@ class HBarChart {
         text(`${_title}`, this.posX + this.width/2, this.posY - this.height - 40 )
     }
 
-    calculateMax() {
+    scaleMax() {
         let max = 0;
         max = Math.max(...this.data)
         let TotalNum = 1750;
