@@ -74,17 +74,6 @@ class BarChart {
         return max;
     }
 
-    drawGradient(x,y,w,h,c1,c2){
-       
-            // Top to bottom gradient
-            for (let i = y; i <= y + h; i++) {
-              let inter = map(i, y, y + h, 0, 1);
-              let c = lerpColor(c1, c2, inter);
-              stroke(c);
-              line(x, i, x + w, i);
-            }
-    }
-
     /**
      * Draws the bars for the bar chart with the data defined in the data attribute
      * @param {number} _rotation - rotates the graph, currently only 0 and 90 supported
@@ -129,8 +118,6 @@ class BarChart {
         rotate(90)
         pop()
     }
-
-
 
     /**
      * Draws the axis lines of a bar chart
@@ -178,6 +165,7 @@ class BarChart {
         pop();
 
     }
+    
     drawXAxis( _labels = true, _lengthTicks = 10) {
         let _numTicks = this.data.length -1
         let tickgap = this.width / _numTicks;

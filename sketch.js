@@ -8,7 +8,7 @@ let series = [];
 let font;
 
 function preload() {
-    font = loadFont('assets/Montserrat-Regular.ttf')
+    font = loadFont('assets/fonts/Montserrat-Regular.ttf')
     table = loadTable(`data/rppi_test.csv`,'csv', 'header');
     // table2 = loadTable(`data/Health_Social_Welfare.csv`, `csv`,`header`)
 }
